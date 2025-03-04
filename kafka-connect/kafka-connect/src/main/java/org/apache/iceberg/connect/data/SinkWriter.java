@@ -33,8 +33,12 @@ import org.apache.iceberg.relocated.com.google.common.base.Preconditions;
 import org.apache.iceberg.relocated.com.google.common.collect.Maps;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.connect.sink.SinkRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SinkWriter {
+  private static final Logger LOG = LoggerFactory.getLogger(SinkWriter.class);
+
   private final IcebergSinkConfig config;
   private final IcebergWriterFactory writerFactory;
   private final Map<String, RecordWriter> writers;
@@ -71,6 +75,12 @@ public class SinkWriter {
   private void save(SinkRecord record) {
     // the consumer stores the offsets that corresponds to the next record to consume,
     // so increment the record offset by one
+    LOG.info(
+        "SinkWriter dealing with record {}: Topic: {}, Partition: {}, Offset: {}",
+        record.toString(),
+        record.topic(),
+        record.kafkaPartition(),
+        record.kafkaOffset());
     OffsetDateTime timestamp =
         record.timestamp() == null
             ? null
