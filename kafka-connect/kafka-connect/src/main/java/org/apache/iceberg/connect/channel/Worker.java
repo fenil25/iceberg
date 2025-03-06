@@ -76,7 +76,7 @@ class Worker extends Channel {
       return false;
     }
 
-    LOG.debug("Handling START_COMMIT by the worker for groupID: {}", event.groupId());
+    LOG.info("Handling START_COMMIT by the worker for groupID: {}", event.groupId());
 
     SinkWriterResult results = sinkWriter.completeWrite();
 
@@ -90,12 +90,12 @@ class Worker extends Channel {
                   Offset offset = results.sourceOffsets().get(tp);
                   if (offset == null) {
                     offset = Offset.NULL_OFFSET;
-                    LOG.debug(
+                    LOG.info(
                         "SinkWriter result for topic partition {}-{} is null",
                         tp.topic(),
                         tp.partition());
                   } else {
-                    LOG.debug(
+                    LOG.info(
                         "SinkWriter result for topic partition {}-{} is {}",
                         tp.topic(),
                         tp.partition(),

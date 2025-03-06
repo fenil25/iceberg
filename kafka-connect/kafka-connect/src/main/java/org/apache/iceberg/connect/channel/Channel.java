@@ -86,7 +86,7 @@ abstract class Channel {
         events.stream()
             .map(
                 event -> {
-                  LOG.debug(
+                  LOG.info(
                       "Sending event of type: {} for GroupID: {}",
                       event.type().name(),
                       event.groupId());
@@ -125,11 +125,12 @@ abstract class Channel {
     while (!records.isEmpty()) {
       ConsumerRecord<String, byte[]> firstRecord = records.iterator().next();
       LOG.info(
-          "Consumer group {} started consuming from offset {} for topic {}-{}",
+          "Consumer group {} started consuming from offset {} for topic {}-{} with pollDuration {}",
           consumer.groupMetadata().groupId(),
           firstRecord.offset(),
           firstRecord.topic(),
-          firstRecord.partition());
+          firstRecord.partition(),
+          pollDuration.toString());
       records.forEach(
           record -> {
             // the consumer stores the offsets that corresponds to the next record to consume,
@@ -139,7 +140,7 @@ abstract class Channel {
             Event event = AvroUtil.decode(record.value());
 
             if (event.groupId().equals(connectGroupId)) {
-              LOG.debug(
+              LOG.info(
                   "Received event of type: {} for group: {}", event.type().name(), event.groupId());
               if (receive(new Envelope(event, record.partition(), record.offset()))) {
                 LOG.info(
