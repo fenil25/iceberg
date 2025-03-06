@@ -85,7 +85,10 @@ public class CommitterImpl implements Committer {
   @Override
   public void save(Collection<SinkRecord> sinkRecords, boolean fromFlush) {
     if (sinkRecords != null && !sinkRecords.isEmpty()) {
-      LOG.info("save was called with nonempty sink records of size {}, fromFLush: {}", sinkRecords.size(), fromFlush);
+      LOG.info(
+          "save was called with nonempty sink records of size {}, fromFLush: {}",
+          sinkRecords.size(),
+          fromFlush);
       worker.save(sinkRecords);
     } else {
       LOG.info("save was called with empty sink records, fromFLush: {}", fromFlush);
