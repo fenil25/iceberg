@@ -152,6 +152,7 @@ abstract class Channel {
           });
       records = consumer.poll(pollDuration);
     }
+    LOG.info("Consumer group {} is exiting from this round of consumeAvailable", consumer.groupMetadata().groupId());
   }
 
   protected Map<Integer, Long> controlTopicOffsets() {
@@ -171,6 +172,7 @@ abstract class Channel {
     consumer.subscribe(ImmutableList.of(controlTopic));
 
     // initial poll with longer duration so the consumer will initialize...
+    LOG.info("We have started the consumer group channel {} with poll of 1", consumer.groupMetadata().groupId());
     consumeAvailable(Duration.ofSeconds(1));
   }
 

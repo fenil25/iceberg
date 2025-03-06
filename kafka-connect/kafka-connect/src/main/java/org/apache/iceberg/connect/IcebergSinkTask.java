@@ -84,14 +84,14 @@ public class IcebergSinkTask extends SinkTask {
   @Override
   public void put(Collection<SinkRecord> sinkRecords) {
     if (committer != null) {
-      committer.save(sinkRecords);
+      committer.save(sinkRecords, false);
     }
   }
 
   @Override
   public void flush(Map<TopicPartition, OffsetAndMetadata> currentOffsets) {
     if (committer != null) {
-      committer.save(null);
+      committer.save(null, true);
     }
   }
 
