@@ -32,7 +32,6 @@ import org.apache.iceberg.relocated.com.google.common.collect.ImmutableMap;
 import org.apache.iceberg.relocated.com.google.common.collect.Maps;
 import org.apache.kafka.clients.admin.Admin;
 import org.apache.kafka.clients.consumer.Consumer;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.clients.producer.Producer;
@@ -86,10 +85,7 @@ abstract class Channel {
         events.stream()
             .map(
                 event -> {
-                  LOG.debug(
-                      "Sending event of type: {} for GroupID: {}",
-                      event.type().name(),
-                      event.groupId());
+                  LOG.info("Sending event of type: {}", event.type().name());
                   byte[] data = AvroUtil.encode(event);
                   // key by producer ID to keep event order
                   return new ProducerRecord<>(controlTopic, producerId, data);
@@ -123,13 +119,6 @@ abstract class Channel {
   protected void consumeAvailable(Duration pollDuration) {
     ConsumerRecords<String, byte[]> records = consumer.poll(pollDuration);
     while (!records.isEmpty()) {
-      ConsumerRecord<String, byte[]> firstRecord = records.iterator().next();
-      LOG.info(
-          "Consumer group {} started consuming from offset {} for topic {}-{}",
-          consumer.groupMetadata().groupId(),
-          firstRecord.offset(),
-          firstRecord.topic(),
-          firstRecord.partition());
       records.forEach(
           record -> {
             // the consumer stores the offsets that corresponds to the next record to consume,
@@ -139,13 +128,9 @@ abstract class Channel {
             Event event = AvroUtil.decode(record.value());
 
             if (event.groupId().equals(connectGroupId)) {
-              LOG.debug(
-                  "Received event of type: {} for group: {}", event.type().name(), event.groupId());
+              LOG.debug("Received event of type: {}", event.type().name());
               if (receive(new Envelope(event, record.partition(), record.offset()))) {
-                LOG.info(
-                    "Handled event of type: {} for group: {}",
-                    event.type().name(),
-                    event.groupId());
+                LOG.info("Handled event of type: {}", event.type().name());
               }
             }
           });
