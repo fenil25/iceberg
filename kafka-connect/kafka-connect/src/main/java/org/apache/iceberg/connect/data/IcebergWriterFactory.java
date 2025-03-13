@@ -110,7 +110,7 @@ class IcebergWriterFactory {
               try {
                 result.set(
                     catalog.createTable(
-                        identifier, schema, partitionSpec, config.autoCreateProps()));
+                        identifier, schema, partitionSpec, config.tablesLocation(), config.autoCreateProps()));
               } catch (AlreadyExistsException e) {
                 result.set(catalog.loadTable(identifier));
               }

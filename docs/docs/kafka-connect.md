@@ -61,6 +61,7 @@ for exactly-once semantics. This requires Kafka 2.5 or later.
 | Property                                   | Description                                                                                                      |
 |--------------------------------------------|------------------------------------------------------------------------------------------------------------------|
 | iceberg.tables                             | Comma-separated list of destination tables                                                                       |
+| iceberg.tables.location                    | Table location for writing data and metadata files                                                               |
 | iceberg.tables.dynamic-enabled             | Set to `true` to route to a table specified in `routeField` instead of using `routeRegex`, default is `false`    |
 | iceberg.tables.route-field                 | For multi-table fan-out, the name of the field used to route records to tables                                   |
 | iceberg.tables.default-commit-branch       | Default branch for commits, main is used if not specified                                                        |
