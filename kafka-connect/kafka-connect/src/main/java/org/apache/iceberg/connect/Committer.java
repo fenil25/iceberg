@@ -28,5 +28,5 @@ public interface Committer {
 
   void stop();
 
-  void save(Collection<SinkRecord> sinkRecords);
+  void save(Collection<SinkRecord> sinkRecords, boolean fromFlush);
 }
