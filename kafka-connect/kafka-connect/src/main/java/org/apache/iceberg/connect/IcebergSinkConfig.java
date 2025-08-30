@@ -66,6 +66,7 @@ public class IcebergSinkConfig extends AbstractConfig {
 
   private static final String CATALOG_NAME_PROP = "iceberg.catalog";
   private static final String TABLES_PROP = "iceberg.tables";
+  private static final String TABLES_LOCATION_PROP = "iceberg.tables.location";
   private static final String TABLES_DYNAMIC_PROP = "iceberg.tables.dynamic-enabled";
   private static final String TABLES_ROUTE_FIELD_PROP = "iceberg.tables.route-field";
   private static final String TABLES_DEFAULT_COMMIT_BRANCH = "iceberg.tables.default-commit-branch";
@@ -117,6 +118,12 @@ public class IcebergSinkConfig extends AbstractConfig {
         null,
         Importance.HIGH,
         "Comma-delimited list of destination tables");
+    configDef.define(
+        TABLES_LOCATION_PROP,
+        ConfigDef.Type.STRING,
+        null,
+        Importance.MEDIUM,
+        "Table location for writing data and metadata files");
     configDef.define(
         TABLES_DYNAMIC_PROP,
         ConfigDef.Type.BOOLEAN,
@@ -319,6 +326,10 @@ public class IcebergSinkConfig extends AbstractConfig {
 
   public boolean dynamicTablesEnabled() {
     return getBoolean(TABLES_DYNAMIC_PROP);
+  }
+
+  public String tablesLocation() {
+    return getString(TABLES_LOCATION_PROP);
   }
 
   public String tablesRouteField() {
