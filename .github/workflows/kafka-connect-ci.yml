@@ -25,6 +25,7 @@ on:
     - '0.*'
     - '1.*'
     - '2.*'
+    - 'new_main'
     tags:
     - 'apache-iceberg-**'
   pull_request:
@@ -99,6 +100,7 @@ jobs:
     - uses: actions/upload-artifact@v4
       if: failure()
       with:
-        name: test logs
+        name: integration-test-report
         path: |
-          **/build/testlogs
+          **/build/reports/tests/integrationTest
+          **/build/test-results/integrationTest
